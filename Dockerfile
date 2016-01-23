@@ -1,5 +1,11 @@
 FROM java:8
 
+# Install basic packages
+RUN apt-get update && apt-get install make
+
+# Install docker
+RUN wget -qO- https://get.docker.com/ | sh
+
 ENV SBT_VERSION 0.13.9
 
 # Install SBT
