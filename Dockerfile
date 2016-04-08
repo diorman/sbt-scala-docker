@@ -1,16 +1,17 @@
-FROM java:8
+FROM java:8-alpine
 
 # Install basic packages
-RUN apt-get update && apt-get install make
+RUN apk add --update bash && rm -rf /var/cache/apk/*
 
-ENV SBT_VERSION 0.13.9
+ENV SBT_VERSION 0.13.11
 
 # Install SBT
-RUN wget https://bintray.com/artifact/download/sbt/debian/sbt-${SBT_VERSION}.deb
-RUN dpkg -i sbt-${SBT_VERSION}.deb
-RUN rm sbt-${SBT_VERSION}.deb
+WORKDIR /opt/
+ADD https://dl.bintray.com/sbt/native-packages/sbt/${SBT_VERSION}/sbt-${SBT_VERSION}.tgz .
+RUN tar xvfz sbt-${SBT_VERSION}.tgz && rm  sbt-${SBT_VERSION}.tgz
+RUN ln -s /opt/sbt/bin/sbt /usr/bin/
 
-ENV SCALA_VERSION 2.11.7
+ENV SCALA_VERSION 2.11.8
 
 # Hack for forcing SBT to install scala
 WORKDIR /tmp/scala
